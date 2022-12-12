@@ -1,0 +1,15 @@
+{
+  "name": "gabriel",
+  "version": "1.0.0",
+  "description": "discord Bot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "FloBaBa33#1999 - ID = 607910928897540105",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
+  }
+}
