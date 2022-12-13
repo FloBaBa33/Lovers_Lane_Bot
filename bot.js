@@ -21,10 +21,11 @@ const client = new Client ({
 
 client.on ( 'error', async ( error ) => {
     await logError ( error.message )
+    console.log ( error )
 })
 
-client.on ( 'interactionCreate', async (interaction) => {
-    if ( !interaction.isCommand()) return
+client.on ( 'interactionCreate', async ( interaction ) => {
+    if ( !interaction.isCommand ()) return
     const { commandName, member, options, guild } = interaction
     switch ( commandName ) {
         case 'confess':
@@ -43,7 +44,7 @@ client.on ( 'interactionCreate', async (interaction) => {
                 { name: 'User', value: `||${ member.user.tag } - ${ member }||`, inline: false },
                 { name: 'ID', value: `||${ member.id }||`, inline: false },
             ])
-            switch (channelId) {
+            switch ( channelId ) {
                 case '1034688783397953556': //sfw vent
                     embed.setTitle ( 'SFW Vent' )
                     logEmbed.setTitle ( 'SFW Vent' )
