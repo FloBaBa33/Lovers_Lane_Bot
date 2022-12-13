@@ -245,8 +245,8 @@ async function logError ( errorMessage ) {
     let now = new Date ()
     let time = {
         Year: now.getFullYear (),
-        Month: now.getMonth (),
-        Day: now.getDay (),
+        Month: now.getMonth () + 1,
+        Day: now.getDate (),
         Hour: now.getHours (),
         Minutes: now.getMinutes (),
         Seconds: now.getSeconds (),
