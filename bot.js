@@ -242,6 +242,7 @@ async function checkForBot ( author ) {
  * @param { String } errorMessage - Error Message
  */
 async function logError ( errorMessage ) {
+    console.log ( errorMessage )
     let now = new Date ()
     let time = {
         Year: now.getFullYear (),
@@ -252,7 +253,7 @@ async function logError ( errorMessage ) {
         Seconds: now.getSeconds (),
     }
     const fileName = `Error_${ time.Year }-${ time.Month }-${ time.Day }_${ time.Hour }-${ time.Minutes }-${ time.Seconds }`
-    fs.writeFile ( `errors/${ fileName }`, errorMessage, function ( err ) {
+    fs.writeFile ( `errors/${ fileName }`, `Error: "${errorMessage}"`, function ( err ) {
         if ( err ) throw err
         console.log ( 'Error Log created' )
     })
