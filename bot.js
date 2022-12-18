@@ -20,8 +20,7 @@ const client = new Client ({
 })
 
 client.on ( 'error', async ( error ) => {
-    await logError ( error.message )
-    console.log ( error )
+    await logError(error.message)
 })
 
 client.on ( 'interactionCreate', async ( interaction ) => {
@@ -90,7 +89,7 @@ client.on ( 'messageCreate', async ( message ) => {
             try {
                 await message.react ( emote )
             } catch ( err ) {
-                await logError ( err )
+                await logError ( `${err}\nEmote: ${emote}` )
             }
         }
     } else if ( await checkForPictures ( message ) && nsfw.channel.includes( channel.id )) {
@@ -98,7 +97,7 @@ client.on ( 'messageCreate', async ( message ) => {
             try {
                 await message.react ( emote )
             } catch ( err ) {
-                await logError ( err )
+                await logError ( `${err}\nEmote: ${emote}` )
             }
         }
     } else if ( await checkForPictures ( message ) && smash.channel.includes ( channel.id )) {
@@ -106,7 +105,7 @@ client.on ( 'messageCreate', async ( message ) => {
             try {
                 await message.react ( emote )
             } catch ( err ) {
-                await logError ( err )
+                await logError ( `${err}\nEmote: ${emote}` )
             }
         }
     }
@@ -242,7 +241,6 @@ async function checkForBot ( author ) {
  * @param { String } errorMessage - Error Message
  */
 async function logError ( errorMessage ) {
-    console.log ( errorMessage )
     let now = new Date ()
     let time = {
         Year: now.getFullYear (),
