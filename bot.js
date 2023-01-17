@@ -397,7 +397,7 @@ async function confession (interaction) {
             await channel.send ({ embeds: [ embed ]})
             await logChannel.send ({ embeds: [ logEmbed ]})
             await interaction.editReply ({
-                content: `${channelId}\n${text}`,
+                content: `<#${channelId}>\n${text}`,
                 // embeds: [ embed ],
                 ephemeral: true,
             })
