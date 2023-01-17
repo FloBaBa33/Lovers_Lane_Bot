@@ -29,7 +29,7 @@ client.on ( 'error', async ( error ) => {
 
 client.on ( 'interactionCreate', async ( interaction ) => {
     if ( interaction.isCommand ()) {
-        const { commandName, member, options, guild } = interaction
+        const { commandName } = interaction
         switch ( commandName ) {
             case 'auction':
                 await auction(interaction)
@@ -41,45 +41,7 @@ client.on ( 'interactionCreate', async ( interaction ) => {
                 await clearBid(interaction)
                 break;
             case 'confess':
-                const channelId = await options.getString ( 'type' )
-                const text = await options.getString ( 'text' )
-                const channel = await guild.channels.cache.get ( channelId )
-                const logChannel = await guild.channels.cache.get ( '925139238410936370' )
-                const embed = new EmbedBuilder ()
-                .setDescription ( text )
-                .setTimestamp ()
-                const logEmbed = new EmbedBuilder ()
-                .setDescription ( text )
-                .setTimestamp ()
-                .addFields ([
-                    { name: 'Channel', value: `<#${ channelId }>`, inline: false },
-                    { name: 'User', value: `||${ member.user.tag } - ${ member }||`, inline: false },
-                    { name: 'ID', value: `||${ member.id }||`, inline: false },
-                ])
-                switch ( channelId ) {
-                    case '1034688783397953556': //sfw vent
-                        embed.setTitle ( 'SFW Vent' )
-                        logEmbed.setTitle ( 'SFW Vent' )
-                        break;
-                    case '1034689314380062792': //nsfw vent
-                        embed.setTitle ( 'NSFW Vent' )
-                        logEmbed.setTitle ( 'NSFW Vent' )
-                        break;
-                    case '1036803429760237568': //confession
-                        embed.setTitle ( 'Anonymous confession' )
-                        logEmbed.setTitle ( 'Anonymous confession' )
-                        break;
-                }
-                await interaction.deferReply ({ ephemeral: true })
-                setTimeout ( async () => {
-                    await channel.send ({ embeds: [ embed ]})
-                    await logChannel.send ({ embeds: [ logEmbed ]})
-                    await interaction.editReply ({
-                        content: `${channelId}\n${text}`,
-                        // embeds: [ embed ],
-                        ephemeral: true,
-                    })
-                }, 1000 * 2 );
+                await confession(interaction)
                 break;
             case 'get-bid':
                 await getBid(interaction)
@@ -170,8 +132,11 @@ client.on ( 'messageCreate', async ( message ) => {
                 await deleteMessage ( message )
             }
             break;
-        case '1046821280621535322': //flash and dash
+        case '1046821280621535322': //flash and dash in devils Gate
             await deleteMessage ( message, 300 )
+            break;
+        case '1051969112777171034': //flash and dash in Starlight Lounge
+            await deleteMessage (message, 300)
             break;
         case '1051931840249872496': //task channel
             await deleteMessage ( message, 2 * 60 * 60 )
@@ -363,6 +328,81 @@ async function command ( cmd, author, args = [], message = null ) {
             return await bulkdelete ( message.channel, msgCount )
     }
     return false
+}
+
+/**
+ * 
+ * @param {Interaction} interaction - the Interaction
+ */
+async function confession (interaction) {
+    const { member, options, guild } = interaction
+    if (guild.id === '1051968270569328650') {
+        const channelId = '1052303295793877052'
+        const text = await options.getString('text')
+        const channel = await guild.channels.cache.get (channelId)
+        const logChannel = await guild.channels.cache.get ('1064967250605527132')
+        const embed = new EmbedBuilder ()
+        .setDescription ( text )
+        .setTimestamp ()
+        .setTitle ( 'Anonymous confession' )
+        const logEmbed = new EmbedBuilder ()
+        .setDescription ( text )
+        .setTimestamp ()
+        .addFields([
+            { name: 'User', value: `||${ member.user.tag } - ${ member }||`, inline: false },
+            { name: 'ID', value: `||${ member.id }||`, inline: false },
+        ])
+        .setTitle ( 'Anonymous confession' )
+        await interaction.deferReply ({ ephemeral: true })
+        setTimeout ( async () => {
+            await channel.send ({ embeds: [ embed ]})
+            await logChannel.send ({ embeds: [ logEmbed ]})
+            await interaction.editReply ({
+                content: `Confession posted in: <#${channel.id}>`,
+                ephemeral: true
+            })
+        }, 1000 * 2);
+    } else if (guild.id === '924511526063341618') {
+        const channelId = await options.getString ( 'type' )
+        const text = await options.getString ( 'text' )
+        const channel = await guild.channels.cache.get ( channelId )
+        const logChannel = await guild.channels.cache.get ( '925139238410936370' )
+        const embed = new EmbedBuilder ()
+        .setDescription ( text )
+        .setTimestamp ()
+        const logEmbed = new EmbedBuilder ()
+        .setDescription ( text )
+        .setTimestamp ()
+        .addFields ([
+            { name: 'Channel', value: `<#${ channelId }>`, inline: false },
+            { name: 'User', value: `||${ member.user.tag } - ${ member }||`, inline: false },
+            { name: 'ID', value: `||${ member.id }||`, inline: false },
+        ])
+        switch ( channelId ) {
+            case '1034688783397953556': //sfw vent
+                embed.setTitle ( 'SFW Vent' )
+                logEmbed.setTitle ( 'SFW Vent' )
+                break;
+            case '1034689314380062792': //nsfw vent
+                embed.setTitle ( 'NSFW Vent' )
+                logEmbed.setTitle ( 'NSFW Vent' )
+                break;
+            case '1036803429760237568': //confession
+                embed.setTitle ( 'Anonymous confession' )
+                logEmbed.setTitle ( 'Anonymous confession' )
+                break;
+        }
+        await interaction.deferReply ({ ephemeral: true })
+        setTimeout ( async () => {
+            await channel.send ({ embeds: [ embed ]})
+            await logChannel.send ({ embeds: [ logEmbed ]})
+            await interaction.editReply ({
+                content: `${channelId}\n${text}`,
+                // embeds: [ embed ],
+                ephemeral: true,
+            })
+        }, 1000 * 2 );
+    }
 }
 
 /**
