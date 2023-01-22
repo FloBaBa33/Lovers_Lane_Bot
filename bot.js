@@ -88,7 +88,7 @@ client.on ( 'messageCreate', async ( message ) => {
     const { channel, content, author, guild } = message
     const prefix = _handler.prefixHandler.getPrefix(guild.id)
 
-    if ( content.startsWith ( prefix )) {
+    if ( content && content.startsWith ( prefix )) {
         let cmd = content.slice ( prefix.length ).split ( ' ' )[ 0 ]
         let args = content.slice ( prefix.length + cmd.length ).split ( ' ' )
         let cmd_res = await command ( cmd, author, args, message )
@@ -118,27 +118,27 @@ client.on ( 'messageCreate', async ( message ) => {
                 await logError ( `${ err }\nEmote: ${ emote }` )
             }
         }
-    } else if ( await checkForPictures ( message ) && message.id === '1051969089486209044') { //starlight selfie
-        const emotes = [ '<a:Aladdin:1063871623779852358>', '<a:Aristocats:1063871582994436206>', '<a:olaf:1064970403589660742>', '<a:CheshireCat:1064970392663507074> ' ]
-        for ( const emote of emotes ) {
+    } else if ( await checkForPictures ( message ) && message.channel.id === '1051969089486209044') { //starlight selfie
+        const starEmotes = [ '<a:Aladdin:1063871623779852358>', '<a:Aristocats:1063871582994436206>', '<a:olaf:1064970403589660742>', '<a:CheshireCat:1064970392663507074> ' ]
+        for ( const emote of starEmotes ) {
             try {
                 await message.react ( emote )
             } catch ( err ) {
                 await logError ( `${ err }\nEmote: ${ emote }`)
             }
         }
-    } else if ( await checkForPictures ( message ) && message.id === '1051969109149098005') { //starlight male nude
-        const emotes = [ '<a:Donaldcountingmoney:1064970391283581008>', '<a:ToyStory:1063871592746197062>', '<a:Gaston:1063871577948700724>', '<a:Hook:1063871570638024784> ' ]
-        for ( const emote of emotes ) {
+    } else if ( await checkForPictures ( message ) && message.channel.id === '1051969109149098005') { //starlight male nude
+        const starEmotes = [ '<a:Donaldcountingmoney:1064970391283581008>', '<a:ToyStory:1063871592746197062>', '<a:Gaston:1063871577948700724>', '<a:Hook:1063871570638024784> ' ]
+        for ( const emote of starEmotes ) {
             try {
                 await message.react ( emote )
             } catch ( err ) {
                 await logError ( `${ err }\nEmote: ${ emote }`)
             }
         }
-    } else if ( await checkForPictures ( message ) && message.id === '1051969107865649173') { // starlight female nude
-        const emotes = [ '<a:Donaldcountingmoney:1064970391283581008>', '<a:Tink:1063871616691486760>', '<a:Stitch2:1063872443455918260>', '<:winkpuppy:1064970396652286012> ' ]
-        for ( const emote of emotes ) {
+    } else if ( await checkForPictures ( message ) && message.channel.id === '1051969107865649173') { // starlight female nude
+        const starEmotes = [ '<a:Donaldcountingmoney:1064970391283581008>', '<a:Tink:1063871616691486760>', '<a:Stitch2:1063872443455918260>', '<:winkpuppy:1064970396652286012> ' ]
+        for ( const emote of starEmotes ) {
             try {
                 await message.react ( emote )
             } catch ( err ) {
@@ -146,8 +146,8 @@ client.on ( 'messageCreate', async ( message ) => {
             }
         }
     } else if ( await checkForPictures ( message ) && message.id === '1051969110449344522') { // starlight lgbtq nude
-        const emotes = [ ':rainbow_flag: ', '<a:DisneyD:1063870141798035516>', '<a:Donaldcountingmoney:1064970391283581008>', '<a:MonstersInc:1063871600937685072>' ]
-        for ( const emote of emotes ) {
+        const starEmotes = [ ':rainbow_flag: ', '<a:DisneyD:1063870141798035516>', '<a:Donaldcountingmoney:1064970391283581008>', '<a:MonstersInc:1063871600937685072>' ]
+        for ( const emote of starEmotes ) {
             try {
                 await message.react ( emote )
             } catch ( err ) {
@@ -184,9 +184,9 @@ client.on ( 'ready', async ( client ) => {
     console.log ( 'ready' )
     console.log ( client.user.username )
 
-    mongoose.connect(process.env.MongoURL, {
-        keepAlive: true
-    })
+    // mongoose.connect(process.env.MongoURL, {
+    //     keepAlive: true
+    // })
 })
 
 /**
