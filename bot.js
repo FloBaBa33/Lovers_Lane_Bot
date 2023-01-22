@@ -297,6 +297,7 @@ async function checkForPictures ( message ) {
     if ( message.attachments && message.attachments.size !== 0 ) return true
     if ( message.content.includes ( '.png' )) return true
     if ( message.content.includes ( '.jepg' )) return true
+    if ( message.content.includes ( '.jpg' )) return true
     return !!( message.content.includes ( '.mp4' ))
 }
 
