@@ -184,9 +184,9 @@ client.on ( 'ready', async ( client ) => {
     console.log ( 'ready' )
     console.log ( client.user.username )
 
-    // mongoose.connect(process.env.MongoURL, {
-    //     keepAlive: true
-    // })
+    mongoose.connect(process.env.MongoURL, {
+        keepAlive: true
+    })
 })
 
 /**
