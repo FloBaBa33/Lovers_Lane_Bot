@@ -94,6 +94,11 @@ client.on ( 'messageCreate', async ( message ) => {
         let cmd_res = await command ( cmd, author, args, message )
         if ( cmd_res !== false ) return await message.reply ( cmd_res )
     }
+    else if ( message.author.id === '470723870270160917' && message.content.includes ( '<@&936405377522757632>')) {
+        const channel = message.mentions.channels.first ()
+        const reply = await channel.send ({ content: '<@&936405377522757632>' })
+        await reply.delete()
+    }
     if ( await checkForPictures ( message ) && selfies.channel.includes ( channel.id )) {
         for ( const emote of selfies.Emote ) {
             try {
