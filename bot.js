@@ -187,10 +187,108 @@ client.on ( 'messageCreate', async ( message ) => {
 client.on ( 'ready', async ( client ) => {
     console.log ( 'ready' )
     console.log ( client.user.username )
-
-    mongoose.connect(process.env.MongoURL, {
-        keepAlive: true
-    })
+    const guildID = '924511526063341618'
+    const guild = client.guilds.cache.find ( guild => guild.id === guildID )
+    const applications = guild.commands
+    await applications.fetch ({ force: true })
+    const guildList = applications.cache.map ( cmd => cmd.name )
+    // if ( !guildList.includes ( 'auction' )) {
+    //     await applications.create ({
+    //         name: 'auction',
+    //         description: 'command to start an action',
+    //         options: [{
+    //             name: 'auction-text',
+    //             description: 'the text you want displayed in for the auction',
+    //             required: true,
+    //             type: ApplicationCommandOptionType.String,
+    //         }, {
+    //             name : 'starting',
+    //             description: 'the starting amount for the bids',
+    //             required: true,
+    //             type: ApplicationCommandOptionType.Number,
+    //         }, {
+    //             name : 'time',
+    //             description: 'The time the Auction should last for in sec',
+    //             required: true,
+    //             type: ApplicationCommandOptionType.Number,
+    //         }, {
+    //             name: 'user',
+    //             description: 'The User that will be auctioned',
+    //             required: true,
+    //             type: ApplicationCommandOptionType.User,
+    //         }]
+    //     })
+    // }
+    // if ( !guildList.includes ( 'bid' )){
+    //     await applications.create ({
+    //         name: 'bid',
+    //         description: 'command to bid on someone',
+    //         options: [{
+    //             name: 'user',
+    //             description: 'the User you want to bid on',
+    //             required: true,
+    //             type: ApplicationCommandOptionType.User,
+    //         }, {
+    //             name: 'bid',
+    //             description: 'the Amount you want to bid on he specified User',
+    //             required: true,
+    //             type: ApplicationCommandOptionType.Number,
+    //         }]
+    //     })
+    // }
+    // if ( !guildList.includes ( 'clear-bids' )){
+    //     await applications.create ({
+    //         name: 'clear-bids',
+    //         description: 'command to clear bids on a specific user',
+    //         options: [{
+    //             name: 'user',
+    //             description: 'the User you want to clear the bids for',
+    //             required: true,
+    //             type: ApplicationCommandOptionType.User,
+    //         }]
+    //     })
+    // }
+    // if ( !guildList.includes ( 'get-bid' )){
+    //     await applications.create ({
+    //         name: 'get-bid',
+    //         description: 'command to get the highest bid on a specific user',
+    //         options: [{
+    //             name: 'user',
+    //             description: 'the User you want to get the highest bid for',
+    //             required: true,
+    //             type: ApplicationCommandOptionType.User,
+    //         }]
+    //     })
+    // }
+    if ( !guildList.includes ( 'confess' )){
+        await applications.create ({
+            name: 'confess',
+            description: 'confess something',
+            options: [{
+                name: 'type',
+                description: 'the type of the confession',
+                required: true,
+                type: ApplicationCommandOptionType.String,
+                choices: [
+                    // { name: 'sfw vent', value: '1034688783397953556' },
+                    // { name: 'nsfw vent', value: '1034689314380062792' },
+                    { name: 'anonymous confession', value: '1036803429760237568' },
+                ]
+            }, {
+                name: 'text',
+                description: 'The confession/vent you want to send',
+                required: true,
+                type: ApplicationCommandOptionType.String,
+            }]
+        })
+    }
+    // applications.cache.forEach ( async cmd => await cmd.delete ())
+    console.log(guildList);
+    // console.log(applications.cache);
+    
+    // mongoose.connect(process.env.MongoURL, {
+    //     keepAlive: true
+    // })
 })
 
 /**
