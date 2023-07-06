@@ -173,6 +173,15 @@ client.on ( 'messageCreate', async ( message ) => {
             }
             break;
         case '1046821280621535322': //flash and dash in devils Gate
+            if ( await checkForPictures ( message )) {
+                if ( message.member.roles.cache.has ( '925162908860710952' ) || message.member.roles.cache.has ( '925163044026351626' ) || message.member.roles.cache.has ( '925163284099924009' ) || message.member.roles.cache.has ( '925163230794498068' ) || message.member.roles.cache.has ( '925163155716440146' ) || message.member.roles.cache.has ( '925163352076980295' )) {
+                    if ( message.attachments && message.attachments.size !== 0 ) {
+                        console.log ( message.attachments.map ( file => `${ file.url } ` ))
+                    } else {
+                        console.log ( message.content )
+                    }
+                }
+            }
             await deleteMessage ( message, 300 )
             break;
         case '1051969112777171034': //flash and dash in Starlight Lounge
@@ -400,6 +409,8 @@ async function checkForPictures ( message ) {
     if ( message.content.includes ( '.png' )) return true
     if ( message.content.includes ( '.jepg' )) return true
     if ( message.content.includes ( '.jpg' )) return true
+    if ( message.content.includes ( '.mov' )) return true
+    if ( message.content.includes ( '.gif' )) return true
     return !!( message.content.includes ( '.mp4' ))
 }
 
@@ -560,6 +571,7 @@ async function deleteMessage ( message, timeOffset = 0 ) {
         await message.delete ()
         return true
     } catch ( err ) {
+        if ( typeof err === 'string' && err === 'DiscordAPIError[10008]: Unknown Message') return false
         await logError ( err )
         return false
     }
