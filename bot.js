@@ -509,8 +509,10 @@ async function confession (interaction) {
         const embed = new EmbedBuilder ()
         .setDescription ( text )
         .setTimestamp ()
+        let test = ''
+        const logText = `${ test.replace ( /(?<begin>[\w\d\s]*)\|\|(?<middle>[\w\d\s]*)\|\|(?<end>[\w\d\s]*)/g, '||$<begin>|| {||$<middle>||} ||$<end>||' )}`
         const logEmbed = new EmbedBuilder ()
-        .setDescription ( text )
+        .setDescription ( logText )
         .setTimestamp ()
         .addFields ([
             { name: 'Channel', value: `<#${ channelId }>`, inline: false },
