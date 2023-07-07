@@ -174,7 +174,7 @@ client.on ( 'messageCreate', async ( message ) => {
                 await deleteMessage ( message )
             }
             break;
-        case '880579612931932162': //flash and dash in devils Gate 1046821280621535322
+        case '1046821280621535322': //flash and dash in devils Gate 
             if ( await checkForPictures ( message )) {
                 const hookClient = new WebhookClient ({ id: process.env.webhookID, token: process.env.webhookToken })
                 await message.guild.members.fetch ()
