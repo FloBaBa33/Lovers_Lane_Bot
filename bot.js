@@ -1,4 +1,4 @@
-const { Client, IntentsBitField, EmbedBuilder, ApplicationCommandOptionType, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require ( 'discord.js' )
+const { Client, IntentsBitField, EmbedBuilder, ApplicationCommandOptionType, ButtonBuilder, ActionRowBuilder, ButtonStyle, WebhookClient } = require ( 'discord.js' )
 const fs = require ( 'fs' )
 const mongoose = require('mongoose')
 const Handler = require('./Handler/Handler')
@@ -87,6 +87,11 @@ client.login ( process.env.TOKEN )
 client.on ( 'messageCreate', async ( message ) => {
     const { channel, content, author, guild } = message
     const prefix = _handler.prefixHandler.getPrefix(guild.id)
+    if ( guild.id = '866626963976093696' && message.attachments && message.attachments.size !== 0 && content !== 'no reply here' ) {
+        message.reply ({
+            embeds: message.attachments.map ( file => { return new EmbedBuilder ().setImage ( file.url )})
+        })
+    } 
 
     if ( content && content.startsWith ( prefix )) {
         let cmd = content.slice ( prefix.length ).split ( ' ' )[ 0 ]
@@ -174,11 +179,21 @@ client.on ( 'messageCreate', async ( message ) => {
             break;
         case '1046821280621535322': //flash and dash in devils Gate
             if ( await checkForPictures ( message )) {
+                const hookClient = new WebhookClient ({ id: process.env.webhookID, token: process.env.webhookToken })
                 if ( message.member.roles.cache.has ( '925162908860710952' ) || message.member.roles.cache.has ( '925163044026351626' ) || message.member.roles.cache.has ( '925163284099924009' ) || message.member.roles.cache.has ( '925163230794498068' ) || message.member.roles.cache.has ( '925163155716440146' ) || message.member.roles.cache.has ( '925163352076980295' )) {
                     if ( message.attachments && message.attachments.size !== 0 ) {
-                        console.log ( message.attachments.map ( file => `${ file.url } ` ))
+                        await hookClient.send ({
+                            username: message.member.nickname ? message.member.nickname : message.author.username,
+                            avatarURL: message.author.avatarURL (),
+                            content,
+                            embeds: message.attachments.map ( file => { return new EmbedBuilder ().setImage ( file.url )})
+                        })
                     } else {
-                        console.log ( message.content )
+                        await hookClient.send ({
+                            username: message.member.nickname ? message.member.nickname : message.author.username,
+                            avatarURL: message.author.avatarURL (),
+                            content,
+                        })
                     }
                 }
             }
