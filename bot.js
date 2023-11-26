@@ -239,11 +239,11 @@ client.on ( 'messageCreate', async ( message ) => {
 client.on ( 'ready', async ( client ) => {
     console.log ( 'ready' )
     console.log ( client.user.username )
-    const guildID = '924511526063341618'
+    const guildID = '1163861439111508019'
     const guild = client.guilds.cache.find ( guild => guild.id === guildID )
     const applications = guild.commands
     await applications.fetch ({ force: true })
-    const guildList = applications.cache.map ( cmd => cmd.name )
+    const guildList = applications.cache.map ( cmd => [ cmd.name, cmd.id ])
     // if ( !guildList.includes ( 'auction' )) {
     //     await applications.create ({
     //         name: 'auction',
@@ -312,22 +312,12 @@ client.on ( 'ready', async ( client ) => {
     //         }]
     //     })
     // }
-    if ( !guildList.includes ( 'confess' )){
+    if ( !guildList.includes ( 'confess' )) {
         await applications.create ({
             name: 'confess',
             description: 'confess something',
             options: [{
-                name: 'type',
-                description: 'the type of the confession',
-                required: true,
-                type: ApplicationCommandOptionType.String,
-                choices: [
-                    // { name: 'sfw vent', value: '1034688783397953556' },
-                    // { name: 'nsfw vent', value: '1034689314380062792' },
-                    { name: 'anonymous confession', value: '1036803429760237568' },
-                ]
-            }, {
-                name: 'text',
+                name: 'confession',
                 description: 'The confession/vent you want to send',
                 required: true,
                 type: ApplicationCommandOptionType.String,
@@ -557,7 +547,7 @@ async function confession ( interaction ) {
         }, 1000 * 2);
     } else if ( guild.id === '1163861439111508019' ) { // psychedelic dreamscape
         const channelId = '1164963763540217936'
-        const text = await options.getString( 'text' )
+        const text = await options.getString( 'confess' )
         const channel = await guild.channels.cache.get ( channelId )
         const logChannel = await guild.channels.cache.get ( '1164957806772891769' )
         const embed = new EmbedBuilder ()
