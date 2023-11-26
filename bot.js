@@ -547,7 +547,7 @@ async function confession ( interaction ) {
         }, 1000 * 2);
     } else if ( guild.id === '1163861439111508019' ) { // psychedelic dreamscape
         const channelId = '1164963763540217936'
-        const text = await options.getString( 'confess' )
+        const text = await options.getString( 'confession' )
         const channel = await guild.channels.cache.get ( channelId )
         const logChannel = await guild.channels.cache.get ( '1164957806772891769' )
         const embed = new EmbedBuilder ()
