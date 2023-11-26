@@ -6,17 +6,28 @@ const _handler = new Handler
 require ( 'dotenv' ).config ()
 let auctioneerRole = '984327279255617586'
 let auctionButton = new Map()
-const selfies = {
+const LLselfies = {
     channel: [ '925140985586024498', '925787445671374848', '1042413286920044614', '1042413344658829432', '1042413455199715379', '1042413489324568576', '1042413608589598810', '1042413658724114502', '1042413738516549662' ], 
     Emote: [ '<a:shy:925133935288152115>', '<a:Read_Love1:958018980449251438>', '<:cute:925133308222898258>', '<a:money:924723385135693864>', '<:looking1:925132681094787103>', '<:yay:924546690999021588>' ]
 }
-const nsfw = {
+const LLnsfw = {
     channel: [ '925142273358962809', '925142320893014079', '925142747202068601', '925787556984012870', '1042058111063695462', '1042058126670700595', '1042058139392024666', '1042058171134521354', '1042058188947718144', '1042058202201722952', '1042058236255285268' ], 
     Emote: [ '<:CumInMe:931904877062393857>', '<:blush:924546130681946123>', '<:mood:927682713375363113>', '<:letsfuck:931058882594357288>', '<a:horny:927682380343443476>', '<:tieup:925621143010967622>' ]
 }
-const smash = {
+const LLsmash = {
     channel: [ '1042068642961035385' ], 
     Emote: [ '<:smash:1042067266252066856>', '<:pass:1042067231053455442>' ]
+}
+
+const PDemotes = {
+    sfw : {
+        channels: [ '1164960579853754428' ],
+        emotes: [ '<a:1096127393833439403:1174505075134169098>', '<a:Frogbounce:1167620250079088741>', '<a:emoji_78:1178101108124692510>' ]
+    },
+    nsfw: {
+        channels: [ '1164963704580874270', '1164963717667115109', '1164963806263378060', '1164963835241836766' ],
+        emotes: [ '<a:931060201149313165:1174505624080486540>', '<a:emoji_73:1178101063354683413>', '<:sweat1:1167620240688033795>' ]
+    }
 }
 
 const client = new Client ({
@@ -100,24 +111,40 @@ client.on ( 'messageCreate', async ( message ) => {
         const reply = await message.channel.send ({ content: '<@&936405377522757632>' })
         await reply.delete()
     }
-    if ( await checkForPictures ( message ) && selfies.channel.includes ( channel.id )) {
-        for ( const emote of selfies.Emote ) {
+    if ( await checkForPictures ( message ) && LLselfies.channel.includes ( channel.id )) {
+        for ( const emote of LLselfies.Emote ) {
             try {
                 await message.react ( emote )
             } catch ( err ) {
                 await logError ( `${ err }\nEmote: ${ emote }` )
             }
         }
-    } else if ( await checkForPictures ( message ) && nsfw.channel.includes( channel.id )) {
-        for ( const emote of nsfw.Emote ) {
+    } else if ( await checkForPictures ( message ) && LLnsfw.channel.includes( channel.id )) {
+        for ( const emote of LLnsfw.Emote ) {
             try {
                 await message.react ( emote )
             } catch ( err ) {
                 await logError ( `${ err }\nEmote: ${ emote }` )
             }
         }
-    } else if ( await checkForPictures ( message ) && smash.channel.includes ( channel.id )) {
-        for ( const emote of smash.Emote ) {
+    } else if ( await checkForPictures ( message ) && LLsmash.channel.includes ( channel.id )) {
+        for ( const emote of LLsmash.Emote ) {
+            try {
+                await message.react ( emote )
+            } catch ( err ) {
+                await logError ( `${ err }\nEmote: ${ emote }` )
+            }
+        }
+    } else if ( await checkForPictures ( message ) && PDemotes.sfw.channels.includes ( channel.id )) { //Psychedelic Dreamscape sfw
+        for ( const emote of PDemotes.sfw.emotes ) {
+            try {
+                await message.react ( emote )
+            } catch ( err ) {
+                await logError ( `${ err }\nEmote: ${ emote }` )
+            }
+        }
+    } else if ( await checkForPictures ( message ) && PDemotes.nsfw.channels.includes ( channel.id )) { //Psychedelic Dreamscape nsfw
+        for ( const emote of PDemotes.nsfw.emotes ) {
             try {
                 await message.react ( emote )
             } catch ( err ) {
@@ -198,11 +225,14 @@ client.on ( 'messageCreate', async ( message ) => {
             await deleteMessage ( message, 300 )
             break;
         case '1051969112777171034': //flash and dash in Starlight Lounge
-            await deleteMessage (message, 300)
+            await deleteMessage ( message, 300 )
             break;
         case '1051931840249872496': //task channel
-            await deleteMessage ( message, 2 * 60 * 60 )
+            await deleteMessage ( message, 7200 )
             break;
+        case '1164963650180759662': // Psychedelic Dreamscape flash & dash
+            await deleteMessage ( message, 300 )
+            break
     }
 })
 
@@ -497,13 +527,39 @@ async function command ( cmd, author, args = [], message = null ) {
  * 
  * @param {Interaction} interaction - the Interaction
  */
-async function confession (interaction) {
+async function confession ( interaction ) {
     const { member, options, guild } = interaction
-    if (guild.id === '1051968270569328650') {
+    if ( guild.id === '1051968270569328650' ) { // devils gate
         const channelId = '1052303295793877052'
-        const text = await options.getString('text')
-        const channel = await guild.channels.cache.get (channelId)
-        const logChannel = await guild.channels.cache.get ('1064967250605527132')
+        const text = await options.getString( 'text' )
+        const channel = await guild.channels.cache.get ( channelId )
+        const logChannel = await guild.channels.cache.get ( '1064967250605527132' )
+        const embed = new EmbedBuilder ()
+        .setDescription ( text )
+        .setTimestamp ()
+        .setTitle ( 'Anonymous confession' )
+        const logEmbed = new EmbedBuilder ()
+        .setDescription ( text )
+        .setTimestamp ()
+        .addFields ([
+            { name: 'User', value: `||${ member.user.tag } - ${ member }||`, inline: false },
+            { name: 'ID', value: `||${ member.id }||`, inline: false },
+        ])
+        .setTitle ( 'Anonymous confession' )
+        await interaction.deferReply ({ ephemeral: true })
+        setTimeout ( async () => {
+            await channel.send ({ embeds: [ embed ]})
+            await logChannel.send ({ embeds: [ logEmbed ]})
+            await interaction.editReply ({
+                content: `Confession posted in: <#${ channel.id }>`,
+                ephemeral: true
+            })
+        }, 1000 * 2);
+    } else if ( guild.id === '1163861439111508019' ) { // psychedelic dreamscape
+        const channelId = '1164963763540217936'
+        const text = await options.getString( 'text' )
+        const channel = await guild.channels.cache.get ( channelId )
+        const logChannel = await guild.channels.cache.get ( '1164957806772891769' )
         const embed = new EmbedBuilder ()
         .setDescription ( text )
         .setTimestamp ()
@@ -521,11 +577,11 @@ async function confession (interaction) {
             await channel.send ({ embeds: [ embed ]})
             await logChannel.send ({ embeds: [ logEmbed ]})
             await interaction.editReply ({
-                content: `Confession posted in: <#${channel.id}>`,
+                content: `Confession posted in: <#${ channel.id }>`,
                 ephemeral: true
             })
         }, 1000 * 2);
-    } else if (guild.id === '924511526063341618') {
+    } else if ( guild.id === '924511526063341618' ) { // the server thats gone
         const channelId = await options.getString ( 'type' )
         const text = await options.getString ( 'text' )
         const channel = await guild.channels.cache.get ( channelId )
