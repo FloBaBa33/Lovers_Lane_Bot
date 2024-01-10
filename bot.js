@@ -45,19 +45,25 @@ client.on ( 'interactionCreate', async ( interaction ) => {
         const { commandName } = interaction
         switch ( commandName ) {
             case 'auction':
-                await auction(interaction)
+                await auction ( interaction )
                 break;
             case 'bid':
-                await placeBid(interaction)
+                await placeBid ( interaction )
                 break;
             case 'clear-bids':
-                await clearBid(interaction)
+                await clearBid ( interaction )
                 break;
             case 'confess':
-                await confession(interaction)
+                await confession ( interaction )
                 break;
             case 'get-bid':
-                await getBid(interaction)
+                await getBid ( interaction )
+                break;
+            case 'suggest':
+                await suggestion ( interaction )
+                break;
+            default:
+                await interaction.reply ({ ephemeral: true, content: 'Sorry i dont recognise this command pls let the Owner of me know'})
                 break;
         }
     } else if (interaction.isButton()) {
@@ -234,6 +240,17 @@ client.on ( 'messageCreate', async ( message ) => {
             if ( message.content && message.content.length != 0 ) { console.log ( message.content )}
             await deleteMessage ( message, 300 )
             break
+        case '1164959098274590810': // Psychedelic Dreamscape Suggestion
+            if ( message.embeds [ 0 ].description.toLowerCase ().startsWith ( 'suggestion by' ) && message.author.id === client.user.id ) {
+                const emotes = [ '<:ZZthumbsup:1194663874968956948>', '<:ZZthumbsdown:1194663932489637898>']
+                for ( const emote of emotes ) {
+                    try {
+                        await message.react ( emote )
+                    } catch ( err ) {
+                        await logError ( `${ err }\nEmote: ${ emote }`)
+                    }
+                }
+            }
     }
 })
 
@@ -320,6 +337,18 @@ client.on ( 'ready', async ( client ) => {
             options: [{
                 name: 'confession',
                 description: 'The confession/vent you want to send',
+                required: true,
+                type: ApplicationCommandOptionType.String,
+            }]
+        })
+    }
+    if ( !guildList.includes ( 'suggest' )) {
+        await applications.create ({
+            name: 'suggest',
+            description: 'suggest something',
+            options: [{
+                name: 'suggestion',
+                description: 'The suggestion you want to send',
                 required: true,
                 type: ApplicationCommandOptionType.String,
             }]
@@ -512,6 +541,30 @@ async function command ( cmd, author, args = [], message = null ) {
             return await bulkdelete ( message.channel, msgCount )
     }
     return false
+}
+
+/**
+ * 
+ * @param {Interaction} interaction - the Interaction
+ */
+async function suggestion ( interaction ) {
+    const { member, options, guild } = interaction
+    if ( guild.id === '1163861439111508019' ) { // psychedelic dreamscape
+        const channelId = '1164959098274590810'
+        const text = await options.getString( 'suggestion' )
+        const channel = await guild.channels.cache.get ( channelId )
+        const embed = new EmbedBuilder ()
+        .setDescription ( `__Suggestion by ${ member }__\n\n${ text }` )
+        .setTimestamp ()
+        await interaction.deferReply ({ ephemeral: true })
+        setTimeout ( async () => {
+            await channel.send ({ embeds: [ embed ]})
+            await interaction.editReply ({
+                content: `Suggestion posted in: <#${ channel.id }>`,
+                ephemeral: true,
+            })
+        }, 1000 * 2);
+    } else await interaction.reply ({ ephemeral: true, content: 'sorry but this command is not enabled in this server'})
 }
 
 /**
