@@ -237,7 +237,6 @@ client.on ( 'messageCreate', async ( message ) => {
             await deleteMessage ( message, 7200 )
             break;
         case '1164963650180759662': // Psychedelic Dreamscape flash & dash
-            if ( message.content && message.content.length != 0 ) { console.log ( message.content )}
             await deleteMessage ( message, 300 )
             break
         case '1164959098274590810': // Psychedelic Dreamscape Suggestion
