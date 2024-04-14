@@ -239,8 +239,11 @@ client.on ( 'messageCreate', async ( message ) => {
         case '1164963650180759662': // Psychedelic Dreamscape flash & dash
             await deleteMessage ( message, 300 )
             break
+        case '1228889523950194788': // Psychedelic Dreamscape flash & dash
+            await deleteMessage ( message, 300 )
+            break
         case '1164959098274590810': // Psychedelic Dreamscape Suggestion
-            if ( message.embeds [ 0 ].description.toLowerCase ().startsWith ( 'suggestion by' ) && message.author.id === client.user.id ) {
+            if ( message.embeds.length !== 0 && message.embeds [ 0 ].description.toLowerCase ().startsWith ( 'suggestion by' ) && message.author.id === client.user.id ) {
                 const emotes = [ '<:ZZthumbsup:1194663874968956948>', '<:ZZthumbsdown:1194663932489637898>']
                 for ( const emote of emotes ) {
                     try {
@@ -353,8 +356,26 @@ client.on ( 'ready', async ( client ) => {
             }]
         })
     }
+    const guildID2 = '1228271807178604626'
+    const guild2 = client.guilds.cache.find ( guild => guild.id === guildID2 )
+    const applications2 = guild2.commands
+    await applications2.fetch ({ force: true })
+    const guildList2 = applications2.cache.map ( cmd => [ cmd.name, cmd.id ])
+    if ( !guildList.includes ( 'confess' )) {
+        await applications2.create ({
+            name: 'confess',
+            description: 'confess something',
+            options: [{
+                name: 'confession',
+                description: 'The confession/vent you want to send',
+                required: true,
+                type: ApplicationCommandOptionType.String,
+            }]
+        })
+    }
     // applications.cache.forEach ( async cmd => await cmd.delete ())
     console.log(guildList);
+    console.log(guildList2);
     // console.log(applications.cache);
     
     // mongoose.connect(process.env.MongoURL, {
@@ -603,6 +624,32 @@ async function confession ( interaction ) {
         const text = await options.getString( 'confession' )
         const channel = await guild.channels.cache.get ( channelId )
         const logChannel = await guild.channels.cache.get ( '1164957806772891769' )
+        const embed = new EmbedBuilder ()
+        .setDescription ( text )
+        .setTimestamp ()
+        .setTitle ( 'Anonymous confession' )
+        const logEmbed = new EmbedBuilder ()
+        .setDescription ( text )
+        .setTimestamp ()
+        .addFields([
+            { name: 'User', value: `||${ member.user.tag } - ${ member }||`, inline: false },
+            { name: 'ID', value: `||${ member.id }||`, inline: false },
+        ])
+        .setTitle ( 'Anonymous confession' )
+        await interaction.deferReply ({ ephemeral: true })
+        setTimeout ( async () => {
+            await channel.send ({ embeds: [ embed ]})
+            await logChannel.send ({ embeds: [ logEmbed ]})
+            await interaction.editReply ({
+                content: `Confession posted in: <#${ channel.id }>`,
+                ephemeral: true
+            })
+        }, 1000 * 2);
+    } else if ( guild.id === '1228271807178604626' ) { // Pleasure Palace
+        const channelId = '1228890631972196423'
+        const text = await options.getString( 'confession' )
+        const channel = await guild.channels.cache.get ( channelId )
+        const logChannel = await guild.channels.cache.get ( '1228893633806205009' )
         const embed = new EmbedBuilder ()
         .setDescription ( text )
         .setTimestamp ()
