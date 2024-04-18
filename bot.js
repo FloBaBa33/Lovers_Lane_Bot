@@ -30,6 +30,17 @@ const PDemotes = {
     }
 }
 
+const PPemotes = {
+    sfw: {
+        channels: [ "1228889786010566777" ],
+        emotes: [ "<:blush:1229285761535443026>", "<a:lick:1229285546325446687>", "<:mine:1229286383881814076>", "<a:wave:1229286134597812317>" ]
+    },
+    nsfw: {
+        channels: [ "1228889543910887495", "1228889559094525982", "1228889651012698122" ],
+        emotes: [ "<a:bite:1229284468603224104>", "<:blush:1229285761535443026>", "<:shy:1229285698314567710>" ]
+    }
+}
+
 const client = new Client ({
     intents: [ IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.GuildMembers, IntentsBitField.Flags.MessageContent ]
 })
@@ -150,7 +161,16 @@ client.on ( 'messageCreate', async ( message ) => {
             }
         }
     } else if ( await checkForPictures ( message ) && PDemotes.nsfw.channels.includes ( channel.id )) { //Psychedelic Dreamscape nsfw
-        for ( const emote of PDemotes.nsfw.emotes ) {
+    } else if ( await checkForPictures ( message ) && PPemotes.sfw.channels.includes ( channel.id )) { //Pleasure Palace 18+ sfw
+        for ( const emote of PPemotes.sfw.emotes ) {
+            try {
+                await message.react ( emote )
+            } catch ( err ) {
+                await logError ( `${ err }\nEmote: ${ emote }` )
+            }
+        }
+    } else if ( await checkForPictures ( message ) && PPemotes.nsfw.channels.includes ( channel.id )) { //Pleasure Palace 18+ nsfw
+        for ( const emote of PPemotes.nsfw.emotes ) {
             try {
                 await message.react ( emote )
             } catch ( err ) {
@@ -239,7 +259,7 @@ client.on ( 'messageCreate', async ( message ) => {
         case '1164963650180759662': // Psychedelic Dreamscape flash & dash
             await deleteMessage ( message, 300 )
             break
-        case '1228889523950194788': // Psychedelic Dreamscape flash & dash
+        case '1228889523950194788': // Pleasure Palace flash & dash
             await deleteMessage ( message, 300 )
             break
         case '1164959098274590810': // Psychedelic Dreamscape Suggestion
