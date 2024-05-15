@@ -19,6 +19,61 @@ const LLsmash = {
     Emote: [ '<:smash:1042067266252066856>', '<:pass:1042067231053455442>' ]
 }
 
+const BLemotes = { //Blossom Grove from Ashh UID => 773276973844791297
+    nsfw: {
+        mon: {
+            channel: [ '1184309336378458287' ],
+            emote: [ '<:2_niced:1085965791293349958>', '<:1_lickcock:1085384330026688522>' ]
+        },
+        tues: {
+            channel: [ '1184672910330302484' ],
+            emote: [ '<:2_loveboobs:1085922004374409228>', '<:1_hearttit:1085255412170883154>' ]
+        },
+        wed: {
+            channel: [ '1184673001313144902' ],
+            emote: [ '<:2_wetrn:1085007689433763920>', '<a:4_panties:1093956390101467217>' ]
+        },
+        thur: {
+            channel: [ '1184673727254892655' ],
+            emote: [ '<:4_sitonmyface:1088807224228462734>', '<:1_lovecum:1105985630191767622>' ]
+        },
+        fri: {
+            channel: [ '1184673102211321986' ],
+            emote: [ '<:emoji_96:1239222069418524682>', '<a:1_assspank:1096865473586544730>' ]
+        },
+        sat: {
+            channel: [ '1184673338195451915' ],
+            emote: [ '<a:4_hot:1089371333265215699>' ]
+        },
+        sun: {
+            channel: [ '1184673834213842996' ],
+            emote: [ '<:A_luv_DNS:1226550993228005467>', '<:D_SakuraDreams_1DNS:1226552903699927090>', ':heart_eyes:' ]
+        },
+        mal: {
+            channel: [ '1184674202792513626' ],
+            emote: [ '<a:emoji_9:1120718001222717593>', '<a:4_1010:1094808679427088415>' ]
+        },
+        fem: {
+            channel: [ '1184674139731148861' ],
+            emote: [ '<a:emoji_8:1120717988493013043>', '<a:4_1010:1094808679427088415>' ]
+        },
+        nbgf: {
+            channel: [ '1184674311328514088' ],
+            emote: [ '<:4_goodbean:1091057428872843424>', '<a:4_1010:1094808679427088415>' ]
+        },
+    },
+    sfw: {
+        selfies: {
+            channel: [ '1184309336202293372' ],
+            emote: [ '<:A_luv_DNS:1226550993228005467>', '<:D_SakuraDreams_1DNS:1226552903699927090>', ':heart_eyes:' ]
+        },
+        hand_pics: {
+            channel: [ '1184674609916805191' ],
+            emote: [ '<:1_lovecum:1105985630191767622>' ]
+        }
+    }
+}
+
 const PDemotes = {
     sfw : {
         channels: [ '1164960579853754428' ],
@@ -118,6 +173,10 @@ client.on ( 'messageCreate', async ( message ) => {
     const { channel, content, author, guild } = message
     const prefix = _handler.prefixHandler.getPrefix(guild.id)
 
+    const BLchannelListNSFW = [ ...BLemotes.nsfw.fem, ...BLemotes.nsfw.fri, ...BLemotes.nsfw.mal, ...BLemotes.nsfw.mon, ...BLemotes.nsfw.nbgf, ...BLemotes.nsfw.sat, ...BLemotes.nsfw.sun, ...BLemotes.nsfw.thur, ...BLemotes.nsfw.tues, ...BLemotes.nsfw.wed ]
+    const BLchannelListSFW = [ ...BLemotes.sfw.hand_pics, ...BLemotes.sfw.selfies ]
+    const BLchannelList = [ ...BLchannelListNSFW, ...BLchannelListSFW ]
+
     if ( content && content.startsWith ( prefix )) {
         let cmd = content.slice ( prefix.length ).split ( ' ' )[ 0 ]
         let args = content.slice ( prefix.length + cmd.length ).split ( ' ' )
@@ -177,6 +236,32 @@ client.on ( 'messageCreate', async ( message ) => {
                 await logError ( `${ err }\nEmote: ${ emote }` )
             }
         }
+    } else if ( await checkForPictures ( message ) && BLchannelList.includes ( channel.id )) { //Blossom Grove
+        const emotes = []
+        if ( BLchannelListNSFW.includes ( channel.id )) { //nsfw
+            const nsfw = BLemotes.nsfw
+            if ( nsfw.fem.channel.includes ( channel.id )) { emotes.push ( ...nsfw.fem.emote )}
+            if ( nsfw.fri.channel.includes ( channel.id )) { emotes.push ( ...nsfw.fri.emote )}
+            if ( nsfw.mal.channel.includes ( channel.id )) { emotes.push ( ...nsfw.mal.emote )}
+            if ( nsfw.mon.channel.includes ( channel.id )) { emotes.push ( ...nsfw.mon.emote )}
+            if ( nsfw.nbgf.channel.includes ( channel.id )) { emotes.push ( ...nsfw.nbgf.emote )}
+            if ( nsfw.sat.channel.includes ( channel.id )) { emotes.push ( ...nsfw.sat.emote )}
+            if ( nsfw.sun.channel.includes ( channel.id )) { emotes.push ( ...nsfw.sun.emote )}
+            if ( nsfw.thur.channel.includes ( channel.id )) { emotes.push ( ...nsfw.thur.emote )}
+            if ( nsfw.tues.channel.includes ( channel.id )) { emotes.push ( ...nsfw.tues.emote )}
+            if ( nsfw.wed.channel.includes ( channel.id )) { emotes.push ( ...nsfw.wed.emote )}
+        } else if ( BLchannelListSFW.includes ( channel.id )) { //sfw
+            const sfw = BLemotes.sfw
+            if ( sfw.hand_pics.channel.includes ( channel.id )) { emotes.push ( ...sfw.hand_pics.emote )}
+            if ( sfw.selfies.channel.includes ( channel.id )) { emotes.push ( ...sfw.selfies.emote )}
+        }
+        for ( const emote of emotes ) {
+            try {
+                await message.react ( emote )
+            } catch ( err ) {
+                await logError ( `${ err }\nEmote: ${ emote }` )
+            }
+        }
     } else if ( await checkForPictures ( message ) && message.channel.id === '1051969089486209044') { //starlight selfie
         const starEmotes = [ '<a:Aladdin:1063871623779852358>', '<a:Aristocats:1063871582994436206>', '<a:olaf:1064970403589660742>', '<a:CheshireCat:1064970392663507074> ' ]
         for ( const emote of starEmotes ) {
@@ -204,7 +289,7 @@ client.on ( 'messageCreate', async ( message ) => {
                 await logError ( `${ err }\nEmote: ${ emote }`)
             }
         }
-    } else if ( await checkForPictures ( message ) && message.id === '1051969110449344522') { // starlight lgbtq nude
+    } else if ( await checkForPictures ( message ) && message.channel.id === '1051969110449344522') { // starlight lgbtq nude
         const starEmotes = [ ':rainbow_flag: ', '<a:DisneyD:1063870141798035516>', '<a:Donaldcountingmoney:1064970391283581008>', '<a:MonstersInc:1063871600937685072>' ]
         for ( const emote of starEmotes ) {
             try {
