@@ -173,9 +173,10 @@ client.on ( 'messageCreate', async ( message ) => {
     const { channel, content, author, guild } = message
     const prefix = _handler.prefixHandler.getPrefix(guild.id)
 
-    const BLchannelListNSFW = [ ...BLemotes.nsfw.fem, ...BLemotes.nsfw.fri, ...BLemotes.nsfw.mal, ...BLemotes.nsfw.mon, ...BLemotes.nsfw.nbgf, ...BLemotes.nsfw.sat, ...BLemotes.nsfw.sun, ...BLemotes.nsfw.thur, ...BLemotes.nsfw.tues, ...BLemotes.nsfw.wed ]
-    const BLchannelListSFW = [ ...BLemotes.sfw.hand_pics, ...BLemotes.sfw.selfies ]
+    const BLchannelListNSFW = [ ...BLemotes.nsfw.fem.channel, ...BLemotes.nsfw.fri.channel, ...BLemotes.nsfw.mal.channel, ...BLemotes.nsfw.mon.channel, ...BLemotes.nsfw.nbgf.channel, ...BLemotes.nsfw.sat.channel, ...BLemotes.nsfw.sun.channel, ...BLemotes.nsfw.thur.channel, ...BLemotes.nsfw.tues.channel, ...BLemotes.nsfw.wed.channel ]
+    const BLchannelListSFW = [ ...BLemotes.sfw.hand_pics.channel, ...BLemotes.sfw.selfies.channel ]
     const BLchannelList = [ ...BLchannelListNSFW, ...BLchannelListSFW ]
+
 
     if ( content && content.startsWith ( prefix )) {
         let cmd = content.slice ( prefix.length ).split ( ' ' )[ 0 ]
