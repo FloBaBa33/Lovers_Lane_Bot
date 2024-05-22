@@ -47,7 +47,7 @@ const BLemotes = { //Blossom Grove from Ashh UID => 773276973844791297
         },
         sun: {
             channel: [ '1184673834213842996' ],
-            emote: [ '<:A_luv_DNS:1226550993228005467>', '<:D_SakuraDreams_1DNS:1226552903699927090>', ':heart_eyes:' ]
+            emote: [ '<:A_luv_DNS:1226550993228005467>', '<:D_SakuraDreams_1DNS:1226552903699927090>', '😍' ]
         },
         mal: {
             channel: [ '1184674202792513626' ],
@@ -65,11 +65,15 @@ const BLemotes = { //Blossom Grove from Ashh UID => 773276973844791297
     sfw: {
         selfies: {
             channel: [ '1184309336202293372' ],
-            emote: [ '<:A_luv_DNS:1226550993228005467>', '<:D_SakuraDreams_1DNS:1226552903699927090>', ':heart_eyes:' ]
+            emote: [ '<:A_luv_DNS:1226550993228005467>', '<:D_SakuraDreams_1DNS:1226552903699927090>', '😍' ]
         },
         hand_pics: {
             channel: [ '1184674609916805191' ],
             emote: [ '<:1_lovecum:1105985630191767622>' ]
+        },
+        suggestion: {
+            channel: [ '1189729705499303957' ],
+            emote: [ '👍', '👎' ]
         }
     }
 }
@@ -174,9 +178,8 @@ client.on ( 'messageCreate', async ( message ) => {
     const prefix = _handler.prefixHandler.getPrefix(guild.id)
 
     const BLchannelListNSFW = [ ...BLemotes.nsfw.fem.channel, ...BLemotes.nsfw.fri.channel, ...BLemotes.nsfw.mal.channel, ...BLemotes.nsfw.mon.channel, ...BLemotes.nsfw.nbgf.channel, ...BLemotes.nsfw.sat.channel, ...BLemotes.nsfw.sun.channel, ...BLemotes.nsfw.thur.channel, ...BLemotes.nsfw.tues.channel, ...BLemotes.nsfw.wed.channel ]
-    const BLchannelListSFW = [ ...BLemotes.sfw.hand_pics.channel, ...BLemotes.sfw.selfies.channel ]
+    const BLchannelListSFW = [ ...BLemotes.sfw.hand_pics.channel, ...BLemotes.sfw.selfies.channel, ...BLemotes.sfw.suggestion.channel ]
     const BLchannelList = [ ...BLchannelListNSFW, ...BLchannelListSFW ]
-
 
     if ( content && content.startsWith ( prefix )) {
         let cmd = content.slice ( prefix.length ).split ( ' ' )[ 0 ]
@@ -255,6 +258,7 @@ client.on ( 'messageCreate', async ( message ) => {
             const sfw = BLemotes.sfw
             if ( sfw.hand_pics.channel.includes ( channel.id )) { emotes.push ( ...sfw.hand_pics.emote )}
             if ( sfw.selfies.channel.includes ( channel.id )) { emotes.push ( ...sfw.selfies.emote )}
+            if ( sfw.suggestion.channel.includes ( channel.id )) { emotes.push ( ...sfw.suggestion.emote )}
         }
         for ( const emote of emotes ) {
             try {
